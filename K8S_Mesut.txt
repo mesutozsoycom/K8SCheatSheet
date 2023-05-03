@@ -1,0 +1,66 @@
+-----------------------------------GENERAL------------------------------------
+kubectl get all
+kubectl cluster-info
+kubectl get nodes
+kubectl get pods -o wide
+kubectl get ns
+kubectl get pods
+
+alias kubectl="minikube kubectl --"
+
+kubectl describe pod <podname>
+kubectl run nginx image=nginx
+
+kubectl apply -f pod.yml
+kubectl delete -f pod.yml
+
+kubectl config set-context --current --namespace=awx
+kubectl get deployment | kubectl get deploy
+
+-------------------------------    STORAGE----------------------------------
+
+kubectl get pv
+kubectl get pvc
+
+kubectl get pvc myclaim -o yaml
+
+-----------------------------------REPLICATION------------------------------------
+kubectl get rs
+kubectl get replicationcontroller
+
+kubectl replace -f replicaset-def.yml
+kubectl scale --replicas=6 -f replicaset-def.yml
+kubectl scale --replicas replicaset myapp-replicaset
+kubectl delete replicaset myapp-replicaset
+kubectl describe replicaset myapp-replicaset
+kubectl edit replicaset myapp-replicaset
+kubectl scale rs new-replicaset --replicas=5
+
+------------------------------------NETWORKING-----------------------------------
+
+kubectl get services
+kubectl get svc
+kubectl get svc kubernetes
+
+
+
+------------------------------------ROLLOUT--------------------------------------
+
+kubectl rollout status deployment/myapp-deployment
+kubectl rollout history deployment/myapp-deployment
+
+kubectl set image deployment/myapp-deployment nginx-container = nginx:1.9.1
+
+kubectl rollout history deployment/myapp-deployment
+kubectl rollout status deployment/myapp-deployment
+
+kubectl rollout undo deployment/myapp-deployment
+
+
+kubectl taint node minikube a=b:NoExecute
+
+
+
+kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
+
+
