@@ -1,3 +1,6 @@
+kubectl get pods | awk {'print $1'} | xargs kubectl delete pod -o name
+
+kubectl delete all --all --all-namespaces
 -----------------------------------GENERAL------------------------------------
 kubectl get all
 kubectl cluster-info
