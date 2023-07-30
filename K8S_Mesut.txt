@@ -8,6 +8,7 @@ kubectl get nodes
 kubectl get pods -o wide
 kubectl get ns
 kubectl get pods
+kubectl create ns mesutarea
 
 alias kubectl="minikube kubectl --"
 
