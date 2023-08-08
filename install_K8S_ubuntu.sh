@@ -85,15 +85,19 @@ function initMasterNode() {
             echo " [ + ] Containerd is runnnig."
             echo " [ + ] initializing K8S MasterNode in Cluster"
             sudo kubeadm config images pull | tee -a $logFileName
-            sudo kubeadm init --pod-network-cidr=$podnetworkIP/16 | tee -a $logFileName
-            mkdir -p $HOME/.kube
-            sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config | tee -a $logFileName
-            sudo chown $(id -u):$(id -g) $HOME/.kube/config | tee -a $logFileName
+            sudo kubeadm init --pod-network-cidr=$podnetworkIP/16 | tee -a $logFileName       
             echo " [ + ] Create Config file for user" 
         else
             echo " [ ! ] Containerd is not Running"
         fi
 }
+
+function createKubeDir() {
+    homedir=`grep $(logname) /etc/passwd|cut -d: -f 6 | grep -v system`
+    mkdir -p $homedir/.kube
+    sudo cp -i /etc/kubernetes/admin.conf $homedir/.kube/config
+    sudo chown $(id -u):$(id -g) $homedir/.kube/config 
+}        
 
 rootCheck
 createConf
@@ -103,3 +107,6 @@ createSysctl
 installContainerd
 installPackage
 initMasterNode
+createKubeDir
+
+#echo "user ALL=(ALL) NOPASSWD:ALL" |sudo tee /etc/sudoers.d/99-user
