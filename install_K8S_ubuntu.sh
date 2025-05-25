@@ -22,7 +22,7 @@ BWhite='\033[1;37m'       # White
 
 function rootCheck() {
 	if [ "${EUID}" -ne 0 ]; then
-		echo -e "${BWhite} YoU MusT BecomE RooT or sudo permissions !"
+		echo -e "${BWhite} You must have root permissions !"
 		exit 1
 	fi
 }
@@ -83,7 +83,9 @@ function initMasterNode() {
             echo " [ + ] Containerd is runnnig."
             echo " [ + ] initializing K8S MasterNode in Cluster"
             sudo kubeadm config images pull | tee -a $logFileName
-            sudo kubeadm init --pod-network-cidr=$podnetworkIP/16 | tee -a $logFileName       
+            sudo kubeadm init --pod-network-cidr=$podnetworkIP/16 | tee -a $logFileName 
+	    kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+            export KUBECONFIG=/etc/kubernetes/admin.conf
             echo " [ + ] Create Config file for user" 
         else
             echo " [ ! ] Containerd is not Running"
@@ -95,6 +97,8 @@ function createKubeDir() {
     mkdir -p $homedir/.kube
     sudo cp -i /etc/kubernetes/admin.conf $homedir/.kube/config
     sudo chown $(id -u):$(id -g) $homedir/.kube/config 
+    export KUBECONFIG=/etc/kubernetes/admin.conf
+    echo "user ALL=(ALL) NOPASSWD:ALL" |sudo tee /etc/sudoers.d/99-user
 }        
 
 rootCheck
@@ -107,4 +111,4 @@ installPackage
 initMasterNode
 createKubeDir
 
-#echo "user ALL=(ALL) NOPASSWD:ALL" |sudo tee /etc/sudoers.d/99-user
+
