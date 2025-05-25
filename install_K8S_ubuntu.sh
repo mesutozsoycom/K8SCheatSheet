@@ -47,7 +47,7 @@ echo " [ + ] Swap Off "
 }
 
 function createSysctl() {
-cat << EOF > /etc/sysctl.d/99-kubernetes-cri.conf
+cat << EOF > /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward =1
 net.bridge.bridge-nf-call-ip6tables =1
@@ -62,7 +62,7 @@ sudo apt install curl gnupg2 software-properties-common apt-transport-https ca-c
 sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo tee /etc/apt/keyrings/kubernetes-apt-keyring.asc > /dev/null | tee -a $logFileName
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list | tee -a $logFileName
 sudo apt-get update | tee -a $logFileName
-sudo apt -y install containerd vim git curl wget kubelet kubeadm kubectl  | tee -a $logFileName
+sudo apt -y install docker.io vim git curl wget kubelet kubeadm kubectl  | tee -a $logFileName
 sudo apt-mark hold kubelet kubeadm kubectl | tee -a $logFileName
 echo " [ + ]  Packages Installed" 
 }
