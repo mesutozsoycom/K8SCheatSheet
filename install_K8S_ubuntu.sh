@@ -1,6 +1,6 @@
 #!/bin/bash
 # Author m0zs0y
-# Date 08/2023
+# Date 05/2025
 # K8S Cluster install Script with containerd runtime
 
 # ---- Vars ------
@@ -59,10 +59,8 @@ echo " [ + ] Created conf "
 
 function installPackage() {
 sudo apt install curl gnupg2 software-properties-common apt-transport-https ca-certificates -y | tee -a $logFileName
-#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - | tee -a $logFileName
-#sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee -a $logFileName
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - | tee -a $logFileName
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list | tee -a $logFileName
+sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo tee /etc/apt/keyrings/kubernetes-apt-keyring.asc > /dev/null | tee -a $logFileName
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list | tee -a $logFileName
 sudo apt-get update | tee -a $logFileName
 sudo apt -y install containerd vim git curl wget kubelet kubeadm kubectl  | tee -a $logFileName
 sudo apt-mark hold kubelet kubeadm kubectl | tee -a $logFileName
